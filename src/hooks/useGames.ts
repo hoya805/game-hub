@@ -2,12 +2,20 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
+import platform from '../../node_modules/axios/lib/helpers/cookies';
 
+export interface Platform {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export interface Game {
     id: number;
     name: string;
     background_image: string;
+    parent_platforms: { platform: Platform} [];  //design smell because of another plaftform inside of parent platforms
+    metacritic: number
   }
   
   interface FetchGamesResponse {
