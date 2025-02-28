@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
+import { AxiosRequestConfig, CanceledError } from "axios";
 
 //Creating genetic hook
 
@@ -8,7 +8,7 @@ interface FetchResponse <T>{
     count: number;
     results: T[];
 }
-const useData = <T>(endpoint:string)=> {
+const useData = <T>(endpoint:string, requestCofig?:AxiosRequestConfig, deps?: any[])=> {
     const [data, setData] = useState<T[]>([]);
     const [error, setError] = useState("");
     const [isLoading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const useData = <T>(endpoint:string)=> {
 
         setLoading(true);
         apiClient
-        .get<FetchResponse<T>>(endpoint,{ signal: contoller.signal })
+        .get<FetchResponse<T>>(endpoint,{ signal: contoller.signal, ...requestCofig })
         .then((res) => {
             setData(res.data.results)
             setLoading(false);
@@ -32,7 +32,7 @@ const useData = <T>(endpoint:string)=> {
            
               
           return () => contoller.abort();
-        }, []);
+        }, deps ? [...deps] : []);
     
     return {data, error, isLoading};
 }
