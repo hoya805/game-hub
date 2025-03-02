@@ -15,7 +15,8 @@ export interface Game {
     name: string;
     background_image: string;
     parent_platforms: { platform: Platform} [];  //design smell because of another plaftform inside of parent platforms
-    metacritic: number
+    metacritic: number;
+    rating_top: number; //whole number
   }
   
 
